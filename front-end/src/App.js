@@ -1,33 +1,53 @@
 import "./App.css";
 import FeatureAdd from './components/feature-add/FeatureAdd'
-import {useState, useEffect} from 'react'
-import Features from "./components/feature-add/features/Features";
+import { useState, useEffect } from 'react'
+import Features from "./components/features/Features";
 
 function App() {
 
-const [features,setFeatures] = useState([]);
+    const [features, setFeatures] = useState([]);
 
 
-useEffect(() => {
+    useEffect(() => {
 
 
-console.log(features)
+        fetch('/features').then(response => {
 
-})
+            if (response.ok) { return response.json() }
 
-function addFeature(feature){
+        }).then(json => {
+            
+            if(json){
+            setFeatures(json)}
+            
+            else{
 
-setFeatures(prev => [...prev,feature])
+                console.log("couldn't fetch features")
+
+            }
+        
+        })
 
 
-}
+
+    }
+        , [])
 
 
-return (<div className='App'>
 
-<FeatureAdd addFeature={addFeature}/>
-<Features features={features}/>
-</div>)
+    function addFeature(feature) {
+
+        setFeatures(prev => [...prev, feature])
+
+
+    }
+
+
+    return (<div className='App'>
+
+        <FeatureAdd addFeature={addFeature} />
+        <Features features={features} />
+    </div>)
 
 
 
